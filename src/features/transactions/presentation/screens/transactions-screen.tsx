@@ -83,10 +83,10 @@ export function TransactionsScreen() {
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
 
-  // Card Interactive States
+  // Per-card Interactive States (Isolated per card)
+  const [cardFreezeMap, setCardFreezeMap] = useState<Record<string, boolean>>({});
+  const [cardBalanceMap, setCardBalanceMap] = useState<Record<string, number>>({});
   const [showCardNumber, setShowCardNumber] = useState(false);
-  const [isFrozen, setIsFrozen] = useState(false);
-  const [availableBalance, setAvailableBalance] = useState(1290.54);
   const totalLimit = 2000.00;
 
   // Modals state
@@ -141,6 +141,8 @@ export function TransactionsScreen() {
       const stored = await getUserDataFromSecureStore();
       if (stored) {
         setUserProfile(stored);
+        if (stored.cardFreezeMap) setCardFreezeMap(stored.cardFreezeMap);
+        if (stored.cardBalanceMap) setCardBalanceMap(stored.cardBalanceMap);
         const apps = stored.pendingApplications || [];
         const approved = apps.filter(
           (a) =>
@@ -163,11 +165,11 @@ export function TransactionsScreen() {
           unsubProfile = onSnapshot(userDocRef, (docSnap) => {
             if (docSnap.exists()) {
               const data = docSnap.data();
-              if (data.availableBalance !== undefined) {
-                setAvailableBalance(data.availableBalance);
+              if (data.cardBalanceMap) {
+                setCardBalanceMap(data.cardBalanceMap);
               }
-              if (data.isFrozen !== undefined) {
-                setIsFrozen(data.isFrozen);
+              if (data.cardFreezeMap) {
+                setCardFreezeMap(data.cardFreezeMap);
               }
               if (data.pendingApplications) {
                 const approved = (data.pendingApplications as CardApplicationDraft[]).filter(
@@ -228,27 +230,49 @@ export function TransactionsScreen() {
     category: 'Credit Card',
   };
 
+  const activeCardKey = activeCard.applicationId || (activeCard as any).cardId || activeCard.productId || `card_${activeCardIndex}`;
+  const isCurrentCardFrozen = Boolean(cardFreezeMap[activeCardKey]);
+  const currentCardBalance = cardBalanceMap[activeCardKey] ?? 1290.54;
+
+  // Filter transactions uniquely for the active card
+  const activeCardTransactions = transactions.filter((tx) => {
+    if (!tx) return false;
+    const mName = tx.merchant || (tx as any).title || (tx as any).description;
+    const amtVal = tx.amount || (tx as any).price;
+    if (!mName || !amtVal || String(mName).trim() !== '' || String(amtVal).trim() !== '') {
+      // Check card association
+      const txCardId = (tx as any).cardId || (tx as any).applicationId;
+      if (txCardId) {
+        return txCardId === activeCardKey;
+      }
+      // Legacy transactions without cardId tag default to 1st card only
+      return activeCardIndex === 0;
+    }
+    return false;
+  });
+
   // Copy Card Number to Clipboard
   const handleCopyCardNumber = () => {
     Clipboard.setString('5270172032204924');
     showTopBanner('Card number copied to clipboard!', 'info');
   };
 
-  // Toggle Card Freeze Status in Firestore & SecureStore
+  // Toggle Card Freeze Status in Firestore & SecureStore for THIS card only
   const handleToggleFreeze = async () => {
-    const nextFrozen = !isFrozen;
-    setIsFrozen(nextFrozen);
+    const nextFrozen = !isCurrentCardFrozen;
+    const updatedMap = { ...cardFreezeMap, [activeCardKey]: nextFrozen };
+    setCardFreezeMap(updatedMap);
 
     const targetUid = userProfile?.uid || session?.uid;
     if (targetUid) {
       try {
         const userDocRef = doc(db, 'klysavo_users', targetUid);
-        await setDoc(userDocRef, { isFrozen: nextFrozen }, { merge: true });
+        await setDoc(userDocRef, { cardFreezeMap: updatedMap }, { merge: true });
       } catch (err) {}
     }
 
     if (userProfile) {
-      const updated = { ...userProfile, isFrozen: nextFrozen };
+      const updated = { ...userProfile, cardFreezeMap: updatedMap };
       setUserProfile(updated);
       await saveUserDataToSecureStore(updated);
     }
@@ -260,7 +284,7 @@ export function TransactionsScreen() {
     }
   };
 
-  // Handle Pay Card Bill via Live Firestore API
+  // Handle Pay Card Bill via Live Firestore API for THIS card only
   const handleConfirmPay = async () => {
     const payVal = parseFloat(payAmountInput);
     if (isNaN(payVal) || payVal <= 0) {
@@ -270,19 +294,22 @@ export function TransactionsScreen() {
 
     setIsPaying(true);
     try {
-      const newBal = Math.min(totalLimit, availableBalance + payVal);
-      setAvailableBalance(newBal);
+      const newBal = Math.min(totalLimit, currentCardBalance + payVal);
+      const updatedBalanceMap = { ...cardBalanceMap, [activeCardKey]: newBal };
+      setCardBalanceMap(updatedBalanceMap);
 
       const targetUid = userProfile?.uid || session?.uid;
       if (targetUid) {
-        // Update user document balance in Firestore
+        // Update user document balance map in Firestore
         const userDocRef = doc(db, 'klysavo_users', targetUid);
-        await setDoc(userDocRef, { availableBalance: newBal }, { merge: true });
+        await setDoc(userDocRef, { cardBalanceMap: updatedBalanceMap }, { merge: true });
 
-        // Add transaction record to Firestore subcollection
+        // Add transaction record tagged with cardId & applicationId
         const txCollRef = collection(db, 'klysavo_users', targetUid, 'transactions');
         await addDoc(txCollRef, {
-          merchant: 'Credit Card Bill Payment',
+          cardId: activeCardKey,
+          applicationId: activeCard.applicationId || activeCardKey,
+          merchant: `${activeCard.productTitle || 'Credit Card'} Bill Payment`,
           time: 'Just now',
           amount: `+ BHD ${payVal.toFixed(3)}`,
           foreignAmount: 'Card Bill Payment',
@@ -292,7 +319,7 @@ export function TransactionsScreen() {
       }
 
       if (userProfile) {
-        await saveUserDataToSecureStore({ ...userProfile, availableBalance: newBal });
+        await saveUserDataToSecureStore({ ...userProfile, cardBalanceMap: updatedBalanceMap });
       }
 
       setIsPaying(false);
@@ -321,7 +348,6 @@ export function TransactionsScreen() {
   }
 
   const rewardPoints = userProfile?.rewards?.totalPoints || 45383;
-  const spentRatio = Math.max(0, Math.min(1, 1 - availableBalance / totalLimit));
 
   return (
     <SafeAreaView style={transactionsStyles.container}>
@@ -362,6 +388,11 @@ export function TransactionsScreen() {
               const cardTitle = card.productTitle || 'CREDIT CARD';
               const bankName = card.bank ? card.bank.toUpperCase() : 'IMTIAZ';
 
+              const itemCardKey = card.applicationId || (card as any).cardId || card.productId || `card_${idx}`;
+              const itemFrozen = Boolean(cardFreezeMap[itemCardKey]);
+              const itemBalance = cardBalanceMap[itemCardKey] ?? 1290.54;
+              const itemSpentRatio = Math.max(0, Math.min(1, 1 - itemBalance / totalLimit));
+
               return (
                 <View
                   key={card.applicationId || idx}
@@ -372,8 +403,8 @@ export function TransactionsScreen() {
                     style={[StyleSheet.absoluteFillObject, { opacity: 0.25 }]}
                     resizeMode="cover"
                   />
-                  {/* Frozen Lock Overlay */}
-                  {isFrozen && activeCardIndex === idx && (
+                  {/* Frozen Lock Overlay per Card */}
+                  {itemFrozen && (
                     <View style={transactionsStyles.frozenOverlay}>
                       <Ionicons name="snow" size={36} color="#90CDF4" />
                       <Text style={transactionsStyles.frozenText}>CARD TEMPORARILY FROZEN</Text>
@@ -409,9 +440,9 @@ export function TransactionsScreen() {
                   {/* Available Balance Section */}
                   <View style={transactionsStyles.balanceSection}>
                     <Text style={transactionsStyles.balanceLabel}>AVAILABLE BALANCE</Text>
-                    <Text style={transactionsStyles.balanceValue}>BHD {availableBalance.toFixed(2)}</Text>
+                    <Text style={transactionsStyles.balanceValue}>BHD {itemBalance.toFixed(2)}</Text>
                     <View style={transactionsStyles.spendingBarBg}>
-                      <View style={[transactionsStyles.spendingBarFill, { width: `${spentRatio * 100}%` }]} />
+                      <View style={[transactionsStyles.spendingBarFill, { width: `${itemSpentRatio * 100}%` }]} />
                     </View>
                   </View>
 
@@ -483,10 +514,10 @@ export function TransactionsScreen() {
             onPress={handleToggleFreeze}
             activeOpacity={0.8}
           >
-            <View style={[transactionsStyles.actionIconBox, isFrozen && { backgroundColor: '#EBF8FF' }]}>
-              <Ionicons name={isFrozen ? 'snow' : 'snow-outline'} size={22} color={isFrozen ? '#3182CE' : colors.darkGreen} />
+            <View style={[transactionsStyles.actionIconBox, isCurrentCardFrozen && { backgroundColor: '#EBF8FF' }]}>
+              <Ionicons name={isCurrentCardFrozen ? 'snow' : 'snow-outline'} size={22} color={isCurrentCardFrozen ? '#3182CE' : colors.darkGreen} />
             </View>
-            <Text style={transactionsStyles.actionLabel}>{isFrozen ? 'UNFREEZE\nCARD' : 'FREEZE\nCARD'}</Text>
+            <Text style={transactionsStyles.actionLabel}>{isCurrentCardFrozen ? 'UNFREEZE\nCARD' : 'FREEZE\nCARD'}</Text>
           </TouchableOpacity>
 
           {/* 3. CARD STATEMENT */}
@@ -514,8 +545,8 @@ export function TransactionsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* RECENT ACTIVITY & TRANSACTIONS SECTION (Only shown when user transactions exist) */}
-        {transactions.length > 0 && (
+        {/* RECENT ACTIVITY & TRANSACTIONS SECTION */}
+        {activeCardTransactions.length > 0 ? (
           <>
             {/* SPENDING TREND GRAPH CARD */}
             <View style={{ backgroundColor: colors.white, borderRadius: 20, padding: 18, marginBottom: 24, borderWidth: 1, borderColor: colors.border }}>
@@ -533,7 +564,7 @@ export function TransactionsScreen() {
             {/* TRANSACTION HISTORY SECTION */}
             <View style={transactionsStyles.historySection}>
               <Text style={transactionsStyles.historyHeaderLabel}>TRANSACTION HISTORY</Text>
-              {transactions.map((tx) => {
+              {activeCardTransactions.map((tx) => {
                 const merchantTitle = tx.merchant || (tx as any).title || (tx as any).description || 'Transaction';
                 const timeSub = tx.time || (tx as any).date || 'Just now';
                 const amountText = tx.amount || (tx as any).price || '';
@@ -561,6 +592,18 @@ export function TransactionsScreen() {
               })}
             </View>
           </>
+        ) : (
+          <View style={{ backgroundColor: colors.white, borderRadius: 20, padding: 32, alignItems: 'center', justifyContent: 'center', marginVertical: 12, borderWidth: 1, borderColor: colors.border, borderStyle: 'dashed' }}>
+            <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(18, 60, 48, 0.08)', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+              <Ionicons name="card-outline" size={32} color={colors.darkGreen} />
+            </View>
+            <Text style={{ fontSize: 16, fontFamily: fontFamilies.bold, color: colors.textDark, textAlign: 'center', marginBottom: 6 }}>
+              No Transactions Yet
+            </Text>
+            <Text style={{ fontSize: 13, fontFamily: fontFamilies.regular, color: colors.textMuted, textAlign: 'center', lineHeight: 19 }}>
+              Make your first transaction to view your activity and spending trends here.
+            </Text>
+          </View>
         )}
       </ScrollView>
 
@@ -578,7 +621,7 @@ export function TransactionsScreen() {
                 </View>
 
                 <Text style={{ fontSize: 13, fontFamily: fontFamilies.regular, color: colors.textMuted, marginBottom: 16 }}>
-                  Current Total Bill Due: <Text style={{ fontFamily: fontFamilies.bold, color: colors.textDark }}>BHD {(totalLimit - availableBalance).toFixed(3)}</Text>
+                  Current Total Bill Due: <Text style={{ fontFamily: fontFamilies.bold, color: colors.textDark }}>BHD {(totalLimit - currentCardBalance).toFixed(3)}</Text>
                 </Text>
 
                 <View style={{ borderBottomWidth: 1.5, borderBottomColor: colors.darkGreen, paddingVertical: 8, flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
@@ -607,7 +650,7 @@ export function TransactionsScreen() {
                   ))}
                   <TouchableOpacity
                     style={{ paddingHorizontal: 14, paddingVertical: 8, borderRadius: 12, backgroundColor: 'rgba(18, 60, 48, 0.1)', borderWidth: 1, borderColor: colors.darkGreen }}
-                    onPress={() => setPayAmountInput((totalLimit - availableBalance).toFixed(3))}
+                    onPress={() => setPayAmountInput((totalLimit - currentCardBalance).toFixed(3))}
                   >
                     <Text style={{ fontSize: 12, fontFamily: fontFamilies.bold, color: colors.darkGreen }}>Full Amount</Text>
                   </TouchableOpacity>

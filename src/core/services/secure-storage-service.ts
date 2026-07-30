@@ -75,6 +75,8 @@ export interface ExtendedUserProfile extends UserProfile {
   pendingApplications?: CardApplicationDraft[];
   availableBalance?: number;
   isFrozen?: boolean;
+  cardFreezeMap?: Record<string, boolean>;
+  cardBalanceMap?: Record<string, number>;
   isLoggedIn?: boolean;
 }
 

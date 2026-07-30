@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -83,7 +83,16 @@ export function IdDetailsStepScreen({ onContinue, onBack, initialData, isLoading
       {/* Standardized App Header outside ScrollView - Same as Reward Page */}
       <AppHeader showBack title="ID Details" onBackPress={onBack} />
 
-      <ScrollView contentContainerStyle={applyCardStyles.scrollContent} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <ScrollView
+          contentContainerStyle={[applyCardStyles.scrollContent, { paddingBottom: 100 }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
         <View>
           {/* Step Progress Bar */}
           <StepProgressBar currentStep={2} totalSteps={5} />
@@ -180,6 +189,7 @@ export function IdDetailsStepScreen({ onContinue, onBack, initialData, isLoading
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
-  );
+    </KeyboardAvoidingView>
+  </SafeAreaView>
+);
 }

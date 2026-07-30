@@ -33,12 +33,14 @@ export function AppHistoryList({
     <View style={transactionsStyles.historySection}>
       <Text style={transactionsStyles.historyHeaderLabel}>{headerTitle}</Text>
       {!items || items.length === 0 ? (
-        <View style={{ paddingVertical: 28, alignItems: 'center', justifyContent: 'center' }}>
-          <Ionicons name={emptyIconName} size={38} color={colors.textMuted} />
-          <Text style={{ fontSize: 14, fontFamily: fontFamilies.bold, color: colors.textDark, marginTop: 10 }}>
+        <View style={{ backgroundColor: colors.white, borderRadius: 20, padding: 32, alignItems: 'center', justifyContent: 'center', marginVertical: 12, borderWidth: 1, borderColor: colors.border, borderStyle: 'dashed' }}>
+          <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(18, 60, 48, 0.08)', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+            <Ionicons name={emptyIconName} size={32} color={colors.darkGreen} />
+          </View>
+          <Text style={{ fontSize: 16, fontFamily: fontFamilies.bold, color: colors.textDark, textAlign: 'center', marginBottom: 6 }}>
             {emptyTitle}
           </Text>
-          <Text style={{ fontSize: 12, color: colors.textMuted, marginTop: 4, textAlign: 'center' }}>
+          <Text style={{ fontSize: 13, fontFamily: fontFamilies.regular, color: colors.textMuted, textAlign: 'center', lineHeight: 19 }}>
             {emptySubtitle}
           </Text>
         </View>

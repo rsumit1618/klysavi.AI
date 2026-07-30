@@ -55,6 +55,7 @@ export default function InsuranceRoute() {
 
   // Modals state
   const [showClaimModal, setShowClaimModal] = useState(false);
+  const [isFilingClaim, setIsFilingClaim] = useState(false);
   const [showStatementModal, setShowStatementModal] = useState(false);
   const [showMoreActionsModal, setShowMoreActionsModal] = useState(false);
   const [showPolicyDetailsModal, setShowPolicyDetailsModal] = useState(false);
@@ -171,6 +172,19 @@ export default function InsuranceRoute() {
     category: 'Health Insurance',
   };
 
+  const activePolicyKey = activePolicy.applicationId || (activePolicy as any).cardId || activePolicy.productId || `policy_${activePolicyIndex}`;
+
+  // Filter transactions uniquely for the active policy
+  const activePolicyTransactions = insuranceTransactions.filter((tx) => {
+    if (!tx) return false;
+    const txPolicyId = (tx as any).policyId || (tx as any).applicationId;
+    if (txPolicyId) {
+      return txPolicyId === activePolicyKey;
+    }
+    // Legacy transactions default to 1st policy only
+    return activePolicyIndex === 0;
+  });
+
   // Render Empty State if no approved insurance policies exist
   if (approvedPolicies.length === 0) {
     return (
@@ -276,15 +290,16 @@ export default function InsuranceRoute() {
         {/* CLAIMS & POLICY HISTORY SECTION */}
         <AppHistoryList
           headerTitle="CLAIMS & POLICY HISTORY"
-          items={insuranceTransactions.map((tx) => ({
+          items={activePolicyTransactions.map((tx) => ({
             id: tx.id,
             title: tx.title || 'Insurance Claim',
             subText: tx.date || 'Just now',
             amountText: tx.amount || 'BHD 0.000',
             statusText: tx.status || 'SUBMITTED',
           }))}
-          emptyTitle="No Claims or Policy History"
-          emptySubtitle="Your insurance claims and policy history will appear here once submitted."
+          emptyIconName="shield-checkmark-outline"
+          emptyTitle="No Transactions Yet"
+          emptySubtitle="Make your first transaction or claim to view your activity here."
         />
       </ScrollView>
 
@@ -308,13 +323,17 @@ export default function InsuranceRoute() {
                 ].map((item) => (
                   <TouchableOpacity
                     key={item.title}
-                    style={{ padding: 14, borderRadius: 16, backgroundColor: '#F0F4F2', marginBottom: 12 }}
+                    style={{ padding: 14, borderRadius: 16, backgroundColor: '#F0F4F2', marginBottom: 12, opacity: isFilingClaim ? 0.6 : 1 }}
+                    disabled={isFilingClaim}
                     onPress={async () => {
-                      setShowClaimModal(false);
+                      if (isFilingClaim) return;
+                      setIsFilingClaim(true);
                       if (session?.uid) {
                         try {
                           const txCollRef = collection(db, 'klysavo_users', session.uid, 'insurance_transactions');
                           await addDoc(txCollRef, {
+                            policyId: activePolicyKey,
+                            applicationId: activePolicy.applicationId || activePolicyKey,
                             title: item.title,
                             date: 'Just now',
                             amount: 'BHD 0.000',
@@ -323,6 +342,8 @@ export default function InsuranceRoute() {
                           });
                         } catch (err) {}
                       }
+                      setIsFilingClaim(false);
+                      setShowClaimModal(false);
                       showTopBanner(`${item.title} request initiated successfully!`, 'success');
                     }}
                   >

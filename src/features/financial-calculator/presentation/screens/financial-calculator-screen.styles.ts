@@ -11,7 +11,7 @@ export const calcStyles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 8,
-    paddingBottom: 40,
+    paddingBottom: 100,
     justifyContent: 'space-between',
   },
 

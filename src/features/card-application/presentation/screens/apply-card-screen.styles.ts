@@ -300,20 +300,27 @@ export const applyCardStyles = StyleSheet.create({
   },
   cardHeaderRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     marginBottom: 14,
+    gap: 8,
   },
   cardHeaderTitle: {
+    flex: 1,
+    marginRight: 8,
     fontSize: 16,
     fontFamily: fontFamilies.bold,
     color: colors.textDark,
+    lineHeight: 22,
   },
   cardHeaderBadge: {
     backgroundColor: colors.mintBg,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 10,
+    flexShrink: 0,
+    alignSelf: 'flex-start',
+    marginTop: 2,
   },
   cardHeaderBadgeText: {
     fontSize: 11,

@@ -345,23 +345,7 @@ export function ApplyCardScreen() {
     }
   };
 
-  const handleFinish = async () => {
-    setIsSaving(true);
-    try {
-      await saveDraftToDatabaseAndStore(currentStep, { status: 'APPROVED' }, true);
-      const stored = await getUserDataFromSecureStore();
-      if (stored) {
-        const cleaned = {
-          ...stored,
-          pendingApplications: cleanAndDeduplicateApplications(stored.pendingApplications),
-        };
-        await saveUserDataToSecureStore(cleaned);
-      }
-    } catch (err) {
-      console.warn('handleFinish refresh note:', err);
-    } finally {
-      setIsSaving(false);
-    }
+  const handleFinish = () => {
     router.replace('/(main)/home');
   };
 

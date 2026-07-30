@@ -19,6 +19,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 
 import { colors } from '@/core/theme/colors';
+import { fontFamilies } from '@/core/theme/typography';
 import { myProfileStyles } from './my-profile-screen.styles';
 import { AppHeader } from '@/shared/components/app-header';
 import {
@@ -202,7 +203,7 @@ export function MyProfileScreen() {
     }
   };
 
-  // 4. Save Updated Address
+  // 4. Save Updated Address - Wait for success response before closing modal
   const onSaveAddress = async () => {
     if (!building.trim() || !roadStreet.trim() || !city.trim()) {
       showTopBanner('Building, Road/Street, and City are required.', 'warning');
@@ -211,9 +212,10 @@ export function MyProfileScreen() {
 
     const result = await handleSaveAddress();
     if (result?.success) {
+      setAddressModalVisible(false);
       showTopBanner('Residential address updated successfully!', 'success');
     } else {
-      showTopBanner('Failed to update address.', 'warning');
+      showTopBanner('Failed to update address. Please try again.', 'warning');
     }
   };
 
@@ -434,9 +436,15 @@ export function MyProfileScreen() {
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={myProfileStyles.settingTitle}>Manage Address</Text>
-                  <Text style={myProfileStyles.settingSubtext} numberOfLines={1}>
-                    {building}, {roadStreet}, {city}
-                  </Text>
+                  {Boolean(building?.trim() || roadStreet?.trim() || city?.trim()) ? (
+                    <Text style={myProfileStyles.settingSubtext} numberOfLines={1}>
+                      {[building, roadStreet, city].filter((s) => s && s.trim() !== '').join(', ')}
+                    </Text>
+                  ) : (
+                    <Text style={[myProfileStyles.settingSubtext, { color: colors.darkGreen, fontFamily: fontFamilies.bold }]} numberOfLines={1}>
+                      Update your residential address
+                    </Text>
+                  )}
                 </View>
               </View>
               <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />

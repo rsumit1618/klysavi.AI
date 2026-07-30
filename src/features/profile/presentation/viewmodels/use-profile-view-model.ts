@@ -113,7 +113,7 @@ export function useProfileViewModel() {
     }
   };
   const handleSaveAddress = async () => {
-    if (!session?.uid) return;
+    if (!session?.uid) return { success: false, error: 'No active session' };
 
     setLoading(true);
     try {
@@ -126,7 +126,6 @@ export function useProfileViewModel() {
 
       const updated = await profileRepository.updateAddress(session.uid, newAddress);
       setUserProfile(updated);
-      setAddressModalVisible(false);
 
       // Refresh session for global UI updates
       await signIn(updated);

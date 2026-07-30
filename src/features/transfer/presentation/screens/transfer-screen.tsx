@@ -164,6 +164,19 @@ export function TransferScreen() {
     category: 'Personal Loan',
   };
 
+  const activeLoanKey = activeLoan.applicationId || (activeLoan as any).cardId || activeLoan.productId || `loan_${activeLoanIndex}`;
+
+  // Filter transactions uniquely for the active loan
+  const activeLoanTransactions = loanTransactions.filter((tx) => {
+    if (!tx) return false;
+    const txLoanId = (tx as any).loanId || (tx as any).applicationId;
+    if (txLoanId) {
+      return txLoanId === activeLoanKey;
+    }
+    // Legacy transactions default to 1st loan only
+    return activeLoanIndex === 0;
+  });
+
   // Handle Pay Monthly EMI
   const handleConfirmPayEmi = async () => {
     const val = parseFloat(payEmiInput);
@@ -177,7 +190,9 @@ export function TransferScreen() {
       if (session?.uid) {
         const txCollRef = collection(db, 'klysavo_users', session.uid, 'loan_transactions');
         await addDoc(txCollRef, {
-          title: 'Monthly EMI Payment',
+          loanId: activeLoanKey,
+          applicationId: activeLoan.applicationId || activeLoanKey,
+          title: `${activeLoan.productTitle || 'Loan'} EMI Payment`,
           date: 'Just now',
           amount: `- BHD ${val.toFixed(3)}`,
           status: 'PAID',
@@ -261,7 +276,7 @@ export function TransferScreen() {
           {/* 2. PREPAY LOAN */}
           <TouchableOpacity
             style={transactionsStyles.actionCard}
-            onPress={() => showTopBanner('Loan Pre-payment request submitted successfully!', 'success')}
+            onPress={() => showTopBanner('Loan prepayment request initiated!', 'info')}
             activeOpacity={0.8}
           >
             <View style={transactionsStyles.actionIconBox}>
@@ -295,18 +310,19 @@ export function TransferScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* LOAN REPAYMENT HISTORY SECTION */}
+        {/* REPAYMENT HISTORY SECTION */}
         <AppHistoryList
           headerTitle="LOAN REPAYMENT HISTORY"
-          items={loanTransactions.map((tx) => ({
+          items={activeLoanTransactions.map((tx) => ({
             id: tx.id,
-            title: tx.title || 'Monthly EMI Payment',
+            title: tx.title || 'EMI Payment',
             subText: tx.date || 'Just now',
-            amountText: tx.amount,
+            amountText: tx.amount || 'BHD 0.000',
             statusText: tx.status || 'PAID',
           }))}
-          emptyTitle="No Repayment History"
-          emptySubtitle="Your repayment history will appear here once EMI payments are processed."
+          emptyIconName="cash-outline"
+          emptyTitle="No Transactions Yet"
+          emptySubtitle="Make your first transaction to view your repayment activity here."
         />
       </ScrollView>
 

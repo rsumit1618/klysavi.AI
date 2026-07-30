@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '@/core/theme/colors';
 
@@ -60,69 +60,79 @@ export function EmergencyContactStepScreen({ onContinue, onBack, initialData, is
       {/* Standardized App Header outside ScrollView - Same as Reward Page */}
       <AppHeader showBack title="Emergency Contact" onBackPress={onBack} />
 
-      <ScrollView contentContainerStyle={applyCardStyles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View>
-          {/* Step Progress Bar */}
-          <StepProgressBar currentStep={4} totalSteps={5} />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      >
+        <ScrollView
+          contentContainerStyle={[applyCardStyles.scrollContent, { paddingBottom: 100 }]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
+            {/* Step Progress Bar */}
+            <StepProgressBar currentStep={4} totalSteps={5} />
 
-          {/* Headline & Sublink */}
-          <View style={applyCardStyles.headlineSection}>
-            <Text style={applyCardStyles.headlineText}>Alternative Contact Person</Text>
-            <TouchableOpacity onPress={() => Alert.alert('Alternative Contact', 'We require an emergency contact for security and account verification purposes.')}>
-              <Text style={applyCardStyles.subLinkText}>Why does BCFC needs Alternative Contact?</Text>
-            </TouchableOpacity>
+            {/* Headline & Sublink */}
+            <View style={applyCardStyles.headlineSection}>
+              <Text style={applyCardStyles.headlineText}>Alternative Contact Person</Text>
+              <TouchableOpacity onPress={() => Alert.alert('Alternative Contact', 'We require an emergency contact for security and account verification purposes.')}>
+                <Text style={applyCardStyles.subLinkText}>Why does BCFC needs Alternative Contact?</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Reusable Form Inputs */}
+            <UnderlineInputField
+              label="NAME"
+              value={name}
+              onChangeText={setName}
+              returnKeyType="next"
+              onSubmitEditing={() => phoneInputRef.current?.focus()}
+              blurOnSubmit={false}
+              placeholder="Enter contact full name"
+            />
+
+            <UnderlineInputField
+              inputRef={phoneInputRef}
+              label="CONTACT NUMBER"
+              prefix="+91"
+              value={phone}
+              onChangeText={(val) => setPhone(val.replace(/\D/g, '').slice(0, 10))}
+              keyboardType="phone-pad"
+              maxLength={10}
+              returnKeyType="done"
+              placeholder="Enter 10-digit mobile number"
+            />
+
+            {/* Relationship Dropdown Picker Field */}
+            <UnderlineInputField
+              label="RELATIONSHIP"
+              isDropdown
+              dropdownValue={relationship || 'Select Relationship'}
+              onRightIconPress={() => setShowDropdown(true)}
+            />
           </View>
 
-          {/* Reusable Form Inputs */}
-          <UnderlineInputField
-            label="NAME"
-            value={name}
-            onChangeText={setName}
-            returnKeyType="next"
-            onSubmitEditing={() => phoneInputRef.current?.focus()}
-            blurOnSubmit={false}
-            placeholder="Enter contact full name"
-          />
-
-          <UnderlineInputField
-            inputRef={phoneInputRef}
-            label="CONTACT NUMBER"
-            prefix="+91"
-            value={phone}
-            onChangeText={(val) => setPhone(val.replace(/\D/g, '').slice(0, 10))}
-            keyboardType="phone-pad"
-            maxLength={10}
-            returnKeyType="done"
-            placeholder="Enter 10-digit mobile number"
-          />
-
-          {/* Relationship Dropdown Picker Field */}
-          <UnderlineInputField
-            label="RELATIONSHIP"
-            isDropdown
-            dropdownValue={relationship || 'Select Relationship'}
-            onRightIconPress={() => setShowDropdown(true)}
-          />
-        </View>
-
-        {/* Bottom Button Section */}
-        <View style={applyCardStyles.buttonStack}>
-          <TouchableOpacity
-            style={[applyCardStyles.nextBtn, { flex: 1 }, (!isFormFilled || isLoading) && applyCardStyles.nextBtnDisabled]}
-            onPress={handleNext}
-            disabled={!isFormFilled || isLoading}
-            activeOpacity={0.85}
-          >
-            {isLoading ? (
-              <ActivityIndicator color={colors.white} size="small" />
-            ) : (
-              <Text style={[applyCardStyles.nextBtnText, !isFormFilled && applyCardStyles.nextBtnTextDisabled]}>
-                NEXT
-              </Text>
-            )}
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          {/* Bottom Button Section */}
+          <View style={applyCardStyles.buttonStack}>
+            <TouchableOpacity
+              style={[applyCardStyles.nextBtn, { flex: 1 }, (!isFormFilled || isLoading) && applyCardStyles.nextBtnDisabled]}
+              onPress={handleNext}
+              disabled={!isFormFilled || isLoading}
+              activeOpacity={0.85}
+            >
+              {isLoading ? (
+                <ActivityIndicator color={colors.white} size="small" />
+              ) : (
+                <Text style={[applyCardStyles.nextBtnText, !isFormFilled && applyCardStyles.nextBtnTextDisabled]}>
+                  NEXT
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       {/* Relationship Dropdown Bottom Sheet Modal */}
       <DropdownPickerModal

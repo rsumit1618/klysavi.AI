@@ -217,30 +217,30 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 activeOpacity={0.7}
               >
                 <Ionicons name={isDark ? 'sunny-outline' : 'moon-outline'} size={22} color={colors.darkGreen} />
-                <Text style={sideMenuStyles.menuItemText}>{isDark ? 'Light Theme Mode' : 'Dark Theme Mode'}</Text>
+                <Text style={sideMenuStyles.menuItemText}>{isDark ? 'Light Theme' : 'Dark Theme'}</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           {/* Logout Action at Bottom */}
-          <View style={{ alignItems: 'flex-start' }}>
+          <View style={{ width: '100%', alignItems: 'center' }}>
             <TouchableOpacity
               style={sideMenuStyles.logoutButton}
               onPress={handleLogout}
               disabled={isLoggingOut}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
             >
               {isLoggingOut ? (
-                <ActivityIndicator size="small" color={colors.darkGreen} />
+                <ActivityIndicator size="small" color="#111518" />
               ) : (
                 <>
-                  <Ionicons name="log-out-outline" size={22} color={colors.darkGreen} />
+                  <Ionicons name="log-out-outline" size={20} color="#111518" />
                   <Text style={sideMenuStyles.logoutText}>Logout</Text>
                 </>
               )}
             </TouchableOpacity>
 
-            <Text style={{ fontSize: 11, fontFamily: fontFamilies.medium, color: colors.textMuted, marginTop: 8 }}>
+            <Text style={{ fontSize: 11, fontFamily: fontFamilies.medium, color: colors.textMuted, marginTop: 12, textAlign: 'center' }}>
               Klysavo AI v{Constants.expoConfig?.version || '1.0.0'}
             </Text>
           </View>

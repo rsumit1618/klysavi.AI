@@ -6,7 +6,7 @@
 
 ## 📥 Direct Standalone Release APK Download & Testing Credentials
 
-[![Download Standalone Android Release APK](https://img.shields.io/badge/📲_Click_Here_To_Download_Standalone_Android_APK-v1.0.0--Release-006644?style=for-the-badge&logo=android&logoColor=white)](https://github.com/rsumit1618/klysavi.AI/raw/master/releases/app-release.apk)
+[![Download Standalone Android Release APK](https://img.shields.io/badge/📲_Click_Here_To_Download_Standalone_Android_APK-v1.0.1--Release-006644?style=for-the-badge&logo=android&logoColor=white)](https://github.com/rsumit1618/klysavi.AI/raw/master/releases/app-release.apk)
 
 > [!IMPORTANT]
 > **📲 Direct Download Link**: [**Download Klysavo AI Banking Standalone APK (`app-release.apk`)**](https://github.com/rsumit1618/klysavi.AI/raw/master/releases/app-release.apk)
