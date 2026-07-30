@@ -1,0 +1,2 @@
+import { Text, View } from 'react-native';
+export function TransactionItem({ description, date, amount }: { description: string; date: string; amount: string }) { return <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 16 }}><View><Text style={{ fontWeight: '600' }}>{description}</Text><Text style={{ color: '#64706C', marginTop: 4 }}>{date}</Text></View><Text>{amount}</Text></View>; }

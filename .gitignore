@@ -1,0 +1,81 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# Dependencies
+node_modules/
+
+# Expo & Build Artifacts
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native Generated & Build Folders
+/ios
+/android
+.kotlin/
+
+# Secrets & Environment Files (CRITICAL - DO NOT PUSH)
+.env
+.env.*
+.env*.local
+!.env.example
+*.apk
+google-services.json
+GoogleService-Info.plist
+credentials.json
+service-account*.json
+secret*.json
+*.token
+
+# Keystores & Certificates (CRITICAL - DO NOT PUSH)
+*.jks
+*.keystore
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+*.cer
+*.crt
+
+# Metro & Bundler
+.metro-health-check*
+
+# Debug & Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+*.log
+*.tmp
+
+# OS System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing & Coverage
+coverage/
+
+# IDEs & Editor Configuration
+.idea/
+.vscode/
+.claude/
+*.swp
+*.swo
+
+# AI Agent Plans & Scratch Workspace (DO NOT PUSH SENSITIVE PROMPTS/PLANS)
+.gemini/
+.brain/
+scratch/
+implementation_plan.md
+walkthrough.md
+
+# TypeScript Build Info
+*.tsbuildinfo
+
+# Example Apps
+app-example
+
+# Scripts
+scripts/
+script/
