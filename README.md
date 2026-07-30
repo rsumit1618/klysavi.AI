@@ -1,6 +1,6 @@
 # Klysavo AI Banking 🏦✨
 > **Precision Cross-Platform AI Banking & Financial Services Mobile Application**
-> Built with **React Native**, **Expo SDK 54**, **TypeScript**, **Firebase**, and **Google Cloud Platform (GCP)**.
+> Built with **React Native**, **Expo SDK 54**, **TypeScript**, **Firebase Firestore**, and **Google Cloud Platform (GCP)**.
 
 ---
 
@@ -14,22 +14,122 @@
 
 ---
 
-## 📱 Visual Screen Showcase & Core Feature Walkthrough
+## 📱 Visual Screen Showcase & App Screenshots
 
-| Screen | Core Feature & Technical Description |
-| :--- | :--- |
-| **1. Precision Splash Screen** | **Brand Identity & App Loading**: Dark emerald splash screen featuring the text-free 3D metallic crest shield logo (`klysavo.AI - PRECISION INTELLIGENCE`). Dismisses native static splash within milliseconds and renders animated pulse ring. |
-| **2. Instant AI Application Overview** | **Product Onboarding Overview**: Displays selected product (*Klysavo Fast Track Car Loan*, *Imtiaz Gold Credit Card*), instant AI badge, and 5-step roadmap (`Scan ID` → `ID Details` → `Address Details` → `Emergency Contact` → `Employment Details`). |
-| **3. CPR ID Camera Scanner (Step 1)** | **Identity Verification**: Real-time camera scanner viewport with dashed framing guides (`Position CPR ID inside frame`), camera permission prompts, base64 preview encoding, and re-scan triggers. |
-| **4. Address Details (Step 3)** | **Location & Compliance**: Clean minimal underline form inputs collecting Building/Villa Number (`1042`), Road/Street (`3819`), Block (`338`), and City/Area (`Manama`) with auto-save progress tracking. |
-| **5. Profile & Photo Action Sheet** | **Account Management & Compressed Photo Upload**: Verified account profile editor with action sheet (`Take Photo`, `Select from Library`, `Remove Photo`). Features on-device JPEG compression (~40KB) stored in Firestore base64. |
-| **6. Contact Us & Support Hub** | **Customer Care & Collapsible FAQs**: Full-width support options (`Call 8000 1122`, `Email support@klysavo.ai`) with interactive accordion FAQ list. |
+### 1. Instant AI Application Overview (5-Step Roadmap)
+![Instant AI Application Overview](assets/images/screenshot_apply_overview.jpg)
+> Displays selected financial product (*Klysavo Fast Track Car Loan*, *Imtiaz Gold Credit Card*), `INSTANT AI` processing badge, and interactive 5-step roadmap (`Scan ID` → `ID Details` → `Address Details` → `Emergency Contact` → `Employment Details`).
+
+---
+
+### 2. Smart CPR ID Camera Scanner (Step 1 of 5)
+![Smart CPR ID Camera Scanner](assets/images/screenshot_scan_cpr_id.jpg)
+> Real-time camera scanner with dashed framing guide (`Position CPR ID inside frame`), camera permission handling, instant base64 document preview, and `SCAN CPR NOW` trigger.
+
+---
+
+### 3. Card Freeze & Unfreeze Security Controls
+![Card Freeze & Unfreeze Security Controls](assets/images/screenshot_freeze_unfreeze_card.jpg)
+> One-tap instant card lock and unlock mechanism with real-time Firestore DB status synchronization, top warning feedback banner, and full transaction blocking.
+
+---
+
+### 4. Verified User Profile & Account Hub
+![Verified User Profile & Account Settings](assets/images/screenshot_my_profile.jpg)
+> Account dashboard displaying user initials badge (`SA`), verified account tag, contact details (`test1@gmail.com`, `7949994999`), address management, appearance mode toggle, and version tag (`v1.0.0 APK Release`).
+
+---
+
+### 5. Profile Photo Action Sheet & Image Compression
+![Profile Photo Action Sheet Modal](assets/images/screenshot_profile_action_sheet.jpg)
+> Modal action sheet (`Take Photo`, `Select from Library`, `Remove Photo`) with client-side JPEG compression (~40KB) synced instantly to Firestore.
+
+---
+
+### 6. 24/7 Customer Support Hub & Accordion FAQ
+![24/7 Support Hub & Accordion FAQ](assets/images/screenshot_contact_us.jpg)
+> Full-width customer support channels (`Call 8000 1122`, `Email support@klysavo.ai`) alongside an interactive accordion list answering common banking questions.
+
+---
+
+## 📑 Step-by-Step Guide: How to Apply for a Card or Loan
+
+Follow these simple steps inside the **Klysavo AI Banking** app to submit an instant AI-evaluated application:
+
+```
+[1. Select Product] ➡️ [2. AI Application Roadmap] ➡️ [3. Scan CPR ID] ➡️ [4. Verify ID & Address] ➡️ [5. Employment & Contact] ➡️ [6. Instant AI Decision]
+```
+
+### 🔹 Step 1: Select Your Desired Product
+1. Log into the app using demo credentials (`test1@gmail.com` / `12345678`) or register a new account.
+2. Navigate to the **Home**, **Cards**, or **Explore** tab.
+3. Choose a card or loan product (e.g., *Klysavo Infinite Card*, *Imtiaz Gold Credit Card*, or *Fast Track Car Loan*) and tap **Apply Now** or **PROCEED**.
+
+### 🔹 Step 2: Overview & 5-Step Roadmap
+1. Review the application overview screen showing the **INSTANT AI** badge.
+2. Confirm the 5 required steps:
+   - **Step 1**: Scan ID
+   - **Step 2**: ID Details
+   - **Step 3**: Address Details
+   - **Step 4**: Emergency Contact
+   - **Step 5**: Employment Details
+3. Tap **PROCEED ➔** to initiate the flow.
+
+### 🔹 Step 3: Scan Your Smart CPR ID (Step 1/5)
+1. Position your CPR / National ID inside the dashed camera framing guide (`Position CPR ID inside frame`).
+2. Tap **SCAN CPR NOW** to capture or upload your ID document.
+3. The AI OCR engine extracts your document details automatically. Tap **NEXT** to continue.
+
+### 🔹 Step 4: Verify Personal & Address Details (Steps 2 & 3/5)
+1. Confirm pre-filled personal details (CPR number, Full Name, Date of Birth, Gender).
+2. Input your residence address details: Building/Villa Number, Road/Street Number, Block Number, and City/Area (*e.g., Manama*).
+3. The app automatically saves your progress locally at every step (**AUTO SAVE** enabled).
+
+### 🔹 Step 5: Provide Emergency Contact & Employment Information (Steps 4 & 5/5)
+1. Enter an emergency contact person (Name, Relationship, Contact Phone Number).
+2. Provide employment information (Employer Name, Job Title, Monthly Salary, Expenses/Obligations).
+
+### 🔹 Step 6: Instant AI Evaluation & Approval
+1. Tap **SUBMIT APPLICATION**.
+2. The Klysavo AI Decision Engine instantly evaluates credit eligibility against banking guidelines.
+3. Receive real-time status feedback (`APPROVED`, `PENDING`, or `DRAFT`) synchronized live across Firestore and the Cards dashboard!
+
+---
+
+## 🔒 Step-by-Step Guide: How to Freeze and Unfreeze Your Card
+
+Klysavo provides instant security card controls allowing you to freeze or unfreeze your physical and virtual credit cards in real-time.
+
+![Card Freeze & Unfreeze Controls](assets/images/screenshot_freeze_unfreeze_card.jpg)
+
+### ❄️ How to Freeze Your Card
+1. Open the **Cards** tab from the bottom navigation bar (or use the **Quick Action** shortcut on the Home dashboard).
+2. Select your active card (e.g., *Klysavo Infinite Card*, *Imtiaz Gold Credit Card*).
+3. Locate the **FREEZE CARD** security toggle button under the card action controls.
+4. Tap **FREEZE CARD**.
+5. **Instant Feedback**: 
+   - A top warning notification banner appears: *"Card frozen successfully. Transactions are temporarily blocked."*
+   - Real-time Firestore state listener updates `isFrozen: true`.
+   - Card status badge displays **FROZEN** and all payment transactions are instantly blocked.
+
+### 🔥 How to Unfreeze Your Card
+1. Navigate back to the **Cards** tab or Home Quick Actions.
+2. Tap the **UNFREEZE CARD** button on your frozen card.
+3. **Instant Feedback**:
+   - A top success notification banner appears: *"Card unfrozen. Card is active for purchases."*
+   - Real-time Firestore state listener updates `isFrozen: false`.
+   - Card status returns to **ACTIVE** for online and point-of-sale transactions.
+
+### 🛠️ Technical Security Specifications: Freeze & Unfreeze
+- **Firestore Real-Time Broadcast**: Mutates `isFrozen` field on `klysavo_users/{uid}` via `setDoc(..., { merge: true })` and broadcasts changes to all active client devices via `onSnapshot`.
+- **Encrypted Local Keychain Sync**: Encrypts and persists state in Expo `SecureStore` (`expo-secure-store`) for instant offline status retention.
+- **Fail-Safe Transaction Interceptor**: Prevents authorization requests while `isFrozen === true`.
 
 ---
 
 ## 🏛️ Architecture, Scalability & Maintainability
 
-Klysavo is built following **Clean Architecture**, **Domain-Driven Design (DDD)**, and the **MVVM (Model-View-ViewModel)** architectural pattern. This guarantees high modularity, zero cross-feature side effects, and seamless codebase scalability.
+Klysavo is built following **Clean Architecture**, **Domain-Driven Design (DDD)**, and the **MVVM (Model-View-ViewModel)** architectural pattern.
 
 ```
 c:\Users\rsumi\Projects\Klysavo\
@@ -38,6 +138,7 @@ c:\Users\rsumi\Projects\Klysavo\
 │   ├── (main)/               # Main App Tab Navigator (Home, Cards, Loans, Insurance, Explore)
 │   ├── apply-card.tsx        # 5-Step Application Flow Route
 │   └── financial-calculator  # Financial Eligibility Calculator Routes
+├── assets/images/            # App Visual Assets & Screen Showcase Screenshots
 ├── src/
 │   ├── core/                 # Shared Services (Firebase, SecureStore, Theme, Typography)
 │   ├── features/             # Feature Modules (auth, home, card-application, rewards, profile, etc.)
@@ -52,17 +153,13 @@ c:\Users\rsumi\Projects\Klysavo\
 ## ⚡ State Refreshing, API Integration & Data Synchronization
 
 ### 1. Live State Refreshing & Reactive UI
-- **Firebase Firestore `onSnapshot` Listeners**: Real-time multi-document snapshot listeners are bound to the `klysavo_users` collection and `applications` sub-collections. Any database mutation instantly re-evaluates local state without requiring manual page reloads or pull-to-refresh.
-- **Focus-Based Screen Refreshing**: Uses Expo Router's `useFocusEffect` hook to trigger light background syncs whenever a user navigates between tabs or returns from the apply flow.
+- **Firebase Firestore `onSnapshot` Listeners**: Real-time multi-document snapshot listeners bound to `klysavo_users` collection and `applications` sub-collections. Any DB mutation instantly re-evaluates local state without requiring manual page reloads.
+- **Focus-Based Screen Refreshing**: Uses Expo Router's `useFocusEffect` hook to trigger light background syncs whenever navigating between tabs or returning from the apply flow.
 - **React 19 Hooks Engine**: Built on lightweight React state primitives (`useState`, `useMemo`, `useCallback`, `useEffect`) to ensure zero unnecessary re-renders.
 
-### 2. API Integration & Network Layer
-- **Firebase Web v11 SDK**: Uses modular Firebase Firestore calls (`doc`, `getDoc`, `setDoc`, `onSnapshot`, `serverTimestamp`) and Firebase Authentication (`initializeAuth`, `onAuthStateChanged`, `signOut`).
-- **On-Device Image Compression Engine**: Profile photos captured via `expo-image-picker` (`quality: 0.75`) are processed into optimized ~40KB Base64 JPEG strings and stored directly in Firestore, bypassing heavy cloud storage bucket SDK latencies.
-
-### 3. Dual-Layer Offline Persistence & Data Reconciliation
+### 2. Dual-Layer Offline Persistence & Data Reconciliation
 - **Hybrid Storage Architecture**: Combines local-first storage via Expo `SecureStore` (`expo-secure-store`) and `AsyncStorage` with background Firestore snapshot synchronization.
-- **Error-Safe Application Draft Recovery**: `cleanAndDeduplicateApplications` normalizes application keys by status priority (`APPROVED` > `SUBMITTED` > `PENDING` > `DRAFT`) and recency. If network connectivity fails, draft data remains 100% intact locally.
+- **Error-Safe Application Draft Recovery**: `cleanAndDeduplicateApplications` normalizes application keys by status priority (`APPROVED` > `SUBMITTED` > `PENDING` > `DRAFT`) and recency. Draft data remains 100% intact offline.
 
 ---
 
