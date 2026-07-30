@@ -16,39 +16,10 @@
 
 ## 📱 Visual Screen Showcase & App Screenshots
 
-### 1. Instant AI Application Overview (5-Step Roadmap)
-![Instant AI Application Overview](assets/images/screenshot_apply_overview.jpg)
-> Displays selected financial product (*Klysavo Fast Track Car Loan*, *Imtiaz Gold Credit Card*), `INSTANT AI` processing badge, and interactive 5-step roadmap (`Scan ID` → `ID Details` → `Address Details` → `Emergency Contact` → `Employment Details`).
-
----
-
-### 2. Smart CPR ID Camera Scanner (Step 1 of 5)
-![Smart CPR ID Camera Scanner](assets/images/screenshot_scan_cpr_id.jpg)
-> Real-time camera scanner with dashed framing guide (`Position CPR ID inside frame`), camera permission handling, instant base64 document preview, and `SCAN CPR NOW` trigger.
-
----
-
-### 3. Card Freeze & Unfreeze Security Controls
-![Card Freeze & Unfreeze Security Controls](assets/images/screenshot_freeze_unfreeze_card.jpg)
-> One-tap instant card lock and unlock mechanism with real-time Firestore DB status synchronization, top warning feedback banner, and full transaction blocking.
-
----
-
-### 4. Verified User Profile & Account Hub
-![Verified User Profile & Account Settings](assets/images/screenshot_my_profile.jpg)
-> Account dashboard displaying user initials badge (`SA`), verified account tag, contact details (`test1@gmail.com`, `7949994999`), address management, appearance mode toggle, and version tag (`v1.0.0 APK Release`).
-
----
-
-### 5. Profile Photo Action Sheet & Image Compression
-![Profile Photo Action Sheet Modal](assets/images/screenshot_profile_action_sheet.jpg)
-> Modal action sheet (`Take Photo`, `Select from Library`, `Remove Photo`) with client-side JPEG compression (~40KB) synced instantly to Firestore.
-
----
-
-### 6. 24/7 Customer Support Hub & Accordion FAQ
-![24/7 Support Hub & Accordion FAQ](assets/images/screenshot_contact_us.jpg)
-> Full-width customer support channels (`Call 8000 1122`, `Email support@klysavo.ai`) alongside an interactive accordion list answering common banking questions.
+| Application Overview | CPR ID Scanner | User Profile Hub | Profile Photo Menu | 24/7 Support Hub |
+| :---: | :---: | :---: | :---: | :---: |
+| <img src="assets/images/screenshot_apply_overview.jpg" width="170" alt="Application Overview"/> | <img src="assets/images/screenshot_scan_cpr_id.jpg" width="170" alt="CPR ID Scanner"/> | <img src="assets/images/screenshot_my_profile.jpg" width="170" alt="User Profile Hub"/> | <img src="assets/images/screenshot_profile_action_sheet.jpg" width="170" alt="Profile Photo Menu"/> | <img src="assets/images/screenshot_contact_us.jpg" width="170" alt="Support Hub"/> |
+| **5-Step Roadmap**<br/>Selected product & instant AI progress indicator | **Smart ID Scan**<br/>Real-time camera scanner with framing guide | **Verified Account**<br/>Profile options, dark mode toggle & version tag | **Photo Action Sheet**<br/>Compressed upload modal (Camera / Gallery) | **Support & FAQs**<br/>Direct hotlines & collapsible accordion FAQ |
 
 ---
 
@@ -99,8 +70,6 @@ Follow these simple steps inside the **Klysavo AI Banking** app to submit an ins
 ## 🔒 Step-by-Step Guide: How to Freeze and Unfreeze Your Card
 
 Klysavo provides instant security card controls allowing you to freeze or unfreeze your physical and virtual credit cards in real-time.
-
-![Card Freeze & Unfreeze Controls](assets/images/screenshot_freeze_unfreeze_card.jpg)
 
 ### ❄️ How to Freeze Your Card
 1. Open the **Cards** tab from the bottom navigation bar (or use the **Quick Action** shortcut on the Home dashboard).
