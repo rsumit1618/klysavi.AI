@@ -6,11 +6,15 @@
 
 ## 📥 Direct Standalone Release APK Download & Testing Credentials
 
+[![Download Standalone Android Release APK](https://img.shields.io/badge/📲_Click_Here_To_Download_Standalone_Android_APK-v1.0.0--Release-006644?style=for-the-badge&logo=android&logoColor=white)](https://github.com/rsumit1618/klysavi.AI/raw/master/android/app/build/outputs/apk/release/app-release.apk)
+
 > [!IMPORTANT]
-> **Use the following credentials to test all live features, profile sync, and card applications:**
+> **📲 Direct Download Link**: [**Download Klysavo AI Banking Standalone APK (`app-release.apk`)**](https://github.com/rsumit1618/klysavi.AI/raw/master/android/app/build/outputs/apk/release/app-release.apk)
+> 
+> **Use the following live credentials to test all features, profile synchronization, and card applications:**
 > - 📧 **Demo Login Email**: `test1@gmail.com`
 > - 🔑 **Demo Password**: `12345678`
-> - ⚡ **Generate Standalone APK**: Run `eas build --platform android --profile preview` or `cd android && ./gradlew assembleRelease`
+> - ⚡ **Local Build Instructions**: Run `cd android && ./gradlew assembleRelease` or `eas build --platform android --profile preview`
 
 ---
 
@@ -82,6 +86,22 @@ c:\Users\rsumi\Projects\Klysavo\
 
 ---
 
+## ⚖️ Assumptions & Trade-offs
+
+1. **Client-Side Image Compression vs Cloud Functions Processing**:
+   - *Trade-off*: Rather than routing raw camera photos to GCP Cloud Functions for compression and storage, client-side JPEG compression (`expo-image-picker` with `quality: 0.75`) encodes optimized ~40KB base64 strings directly in Firestore.
+   - *Rationale*: Reduces cloud infrastructure latencies and eliminates setup bottlenecks for standalone APK execution.
+
+2. **OCR ID Auto-Extraction**:
+   - *Trade-off*: Smart CPR ID scanning uses client-side simulated document bounding boxes and mock OCR parsing rather than Google Cloud Vision API.
+   - *Rationale*: Ensures zero API key dependency failures during reviewer evaluation.
+
+3. **Database Security Rules**:
+   - *Trade-off*: Firestore rules are configured for easy demo evaluation (`firestore.rules`).
+   - *Rationale*: Simplifies testing with demo login credentials across multiple devices without IP blocking.
+
+---
+
 ## 📦 Package & Technology Stack Inventory
 
 | Category | Package / Library | Description & Usage |
@@ -108,7 +128,7 @@ c:\Users\rsumi\Projects\Klysavo\
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/Klysavo.git
+   git clone https://github.com/rsumit1618/klysavi.AI.git
    cd Klysavo
    ```
 
