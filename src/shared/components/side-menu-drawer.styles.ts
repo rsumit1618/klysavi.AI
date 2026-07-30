@@ -106,7 +106,9 @@ export const sideMenuStyles = StyleSheet.create({
   logoutButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
+    gap: 16,
+    paddingVertical: 4,
+    width: '100%',
   },
   logoutText: {
     fontSize: 15,

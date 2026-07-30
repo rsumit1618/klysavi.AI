@@ -223,7 +223,7 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
           </View>
 
           {/* Logout Action at Bottom */}
-          <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: 'flex-start' }}>
             <TouchableOpacity
               style={sideMenuStyles.logoutButton}
               onPress={handleLogout}
@@ -234,13 +234,13 @@ export function SideMenuDrawer({ visible, onClose }: SideMenuDrawerProps) {
                 <ActivityIndicator size="small" color={colors.darkGreen} />
               ) : (
                 <>
-                  <Ionicons name="log-out-outline" size={20} color={colors.darkGreen} />
+                  <Ionicons name="log-out-outline" size={22} color={colors.darkGreen} />
                   <Text style={sideMenuStyles.logoutText}>Logout</Text>
                 </>
               )}
             </TouchableOpacity>
 
-            <Text style={{ fontSize: 11, fontFamily: fontFamilies.medium, color: colors.textMuted, marginTop: 12 }}>
+            <Text style={{ fontSize: 11, fontFamily: fontFamilies.medium, color: colors.textMuted, marginTop: 8 }}>
               Klysavo AI v{Constants.expoConfig?.version || '1.0.0'}
             </Text>
           </View>
