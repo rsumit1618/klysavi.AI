@@ -14,85 +14,35 @@
 
 ---
 
-## 📱 Visual Screen Showcase & App Screenshots
+## 📱 App Screenshots Showcase
 
-| Application Overview | CPR ID Scanner | User Profile Hub | Profile Photo Menu | 24/7 Support Hub |
-| :---: | :---: | :---: | :---: | :---: |
-| <img src="assets/images/screenshot_apply_overview.jpg" width="170" alt="Application Overview"/> | <img src="assets/images/screenshot_scan_cpr_id.jpg" width="170" alt="CPR ID Scanner"/> | <img src="assets/images/screenshot_my_profile.jpg" width="170" alt="User Profile Hub"/> | <img src="assets/images/screenshot_profile_action_sheet.jpg" width="170" alt="Profile Photo Menu"/> | <img src="assets/images/screenshot_contact_us.jpg" width="170" alt="Support Hub"/> |
-| **5-Step Roadmap**<br/>Selected product & instant AI progress indicator | **Smart ID Scan**<br/>Real-time camera scanner with framing guide | **Verified Account**<br/>Profile options, dark mode toggle & version tag | **Photo Action Sheet**<br/>Compressed upload modal (Camera / Gallery) | **Support & FAQs**<br/>Direct hotlines & collapsible accordion FAQ |
+| Home Dashboard | My Cards | My Loans | Scan CPR ID |
+| :---: | :---: | :---: | :---: |
+| <img src="assets/images/screenshot_home_dashboard.jpg" width="165" alt="Home Dashboard"/> | <img src="assets/images/screenshot_my_cards.jpg" width="165" alt="My Cards"/> | <img src="assets/images/screenshot_my_loans.jpg" width="165" alt="My Loans"/> | <img src="assets/images/screenshot_scan_cpr_id.jpg" width="165" alt="Scan CPR ID"/> |
 
----
-
-## 📑 Step-by-Step Guide: How to Apply for a Card or Loan
-
-Follow these simple steps inside the **Klysavo AI Banking** app to submit an instant AI-evaluated application:
-
-```
-[1. Select Product] ➡️ [2. AI Application Roadmap] ➡️ [3. Scan CPR ID] ➡️ [4. Verify ID & Address] ➡️ [5. Employment & Contact] ➡️ [6. Instant AI Decision]
-```
-
-### 🔹 Step 1: Select Your Desired Product
-1. Log into the app using demo credentials (`test1@gmail.com` / `12345678`) or register a new account.
-2. Navigate to the **Home**, **Cards**, or **Explore** tab.
-3. Choose a card or loan product (e.g., *Klysavo Infinite Card*, *Imtiaz Gold Credit Card*, or *Fast Track Car Loan*) and tap **Apply Now** or **PROCEED**.
-
-### 🔹 Step 2: Overview & 5-Step Roadmap
-1. Review the application overview screen showing the **INSTANT AI** badge.
-2. Confirm the 5 required steps:
-   - **Step 1**: Scan ID
-   - **Step 2**: ID Details
-   - **Step 3**: Address Details
-   - **Step 4**: Emergency Contact
-   - **Step 5**: Employment Details
-3. Tap **PROCEED ➔** to initiate the flow.
-
-### 🔹 Step 3: Scan Your Smart CPR ID (Step 1/5)
-1. Position your CPR / National ID inside the dashed camera framing guide (`Position CPR ID inside frame`).
-2. Tap **SCAN CPR NOW** to capture or upload your ID document.
-3. The AI OCR engine extracts your document details automatically. Tap **NEXT** to continue.
-
-### 🔹 Step 4: Verify Personal & Address Details (Steps 2 & 3/5)
-1. Confirm pre-filled personal details (CPR number, Full Name, Date of Birth, Gender).
-2. Input your residence address details: Building/Villa Number, Road/Street Number, Block Number, and City/Area (*e.g., Manama*).
-3. The app automatically saves your progress locally at every step (**AUTO SAVE** enabled).
-
-### 🔹 Step 5: Provide Emergency Contact & Employment Information (Steps 4 & 5/5)
-1. Enter an emergency contact person (Name, Relationship, Contact Phone Number).
-2. Provide employment information (Employer Name, Job Title, Monthly Salary, Expenses/Obligations).
-
-### 🔹 Step 6: Instant AI Evaluation & Approval
-1. Tap **SUBMIT APPLICATION**.
-2. The Klysavo AI Decision Engine instantly evaluates credit eligibility against banking guidelines.
-3. Receive real-time status feedback (`APPROVED`, `PENDING`, or `DRAFT`) synchronized live across Firestore and the Cards dashboard!
+| Application Roadmap | My Profile | Photo Action Sheet | Support Hub |
+| :---: | :---: | :---: | :---: |
+| <img src="assets/images/screenshot_apply_overview.jpg" width="165" alt="Application Overview"/> | <img src="assets/images/screenshot_my_profile.jpg" width="165" alt="My Profile"/> | <img src="assets/images/screenshot_profile_action_sheet.jpg" width="165" alt="Photo Action Sheet"/> | <img src="assets/images/screenshot_contact_us.jpg" width="165" alt="Support Hub"/> |
 
 ---
 
-## 🔒 Step-by-Step Guide: How to Freeze and Unfreeze Your Card
+## 📑 How to Apply for a Card or Loan
 
-Klysavo provides instant security card controls allowing you to freeze or unfreeze your physical and virtual credit cards in real-time.
+1. Log into the app using demo credentials (`test1@gmail.com` / `12345678`).
+2. Navigate to **Home**, **Cards**, or **Explore** tab and tap **Apply Now**.
+3. Scan your CPR / National ID card using the smart camera scanner.
+4. Verify ID and residential address details (with auto-save progress tracking).
+5. Provide emergency contact and employment information.
+6. Submit application for instant AI eligibility scoring and live Firestore synchronization.
 
-### ❄️ How to Freeze Your Card
-1. Open the **Cards** tab from the bottom navigation bar (or use the **Quick Action** shortcut on the Home dashboard).
-2. Select your active card (e.g., *Klysavo Infinite Card*, *Imtiaz Gold Credit Card*).
-3. Locate the **FREEZE CARD** security toggle button under the card action controls.
-4. Tap **FREEZE CARD**.
-5. **Instant Feedback**: 
-   - A top warning notification banner appears: *"Card frozen successfully. Transactions are temporarily blocked."*
-   - Real-time Firestore state listener updates `isFrozen: true`.
-   - Card status badge displays **FROZEN** and all payment transactions are instantly blocked.
+---
 
-### 🔥 How to Unfreeze Your Card
-1. Navigate back to the **Cards** tab or Home Quick Actions.
-2. Tap the **UNFREEZE CARD** button on your frozen card.
-3. **Instant Feedback**:
-   - A top success notification banner appears: *"Card unfrozen. Card is active for purchases."*
-   - Real-time Firestore state listener updates `isFrozen: false`.
-   - Card status returns to **ACTIVE** for online and point-of-sale transactions.
+## 🔒 How to Freeze and Unfreeze Cards
 
-### 🛠️ Technical Security Specifications: Freeze & Unfreeze
-- **Firestore Real-Time Broadcast**: Mutates `isFrozen` field on `klysavo_users/{uid}` via `setDoc(..., { merge: true })` and broadcasts changes to all active client devices via `onSnapshot`.
-- **Encrypted Local Keychain Sync**: Encrypts and persists state in Expo `SecureStore` (`expo-secure-store`) for instant offline status retention.
-- **Fail-Safe Transaction Interceptor**: Prevents authorization requests while `isFrozen === true`.
+1. Open the **Cards** tab or Home Quick Actions.
+2. Select your card (*Klysavo Infinite Card*, *HDFC Regalia*, *Imtiaz Gold*).
+3. Tap **FREEZE CARD** to lock the card instantly (`isFrozen: true` on Firestore).
+4. Tap **UNFREEZE CARD** to restore card authorization for online and POS purchases.
 
 ---
 
