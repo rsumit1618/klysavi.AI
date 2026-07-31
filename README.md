@@ -11,6 +11,8 @@
 > [!IMPORTANT]
 > **📲 Direct Download Link**: [**Download Klysavo AI Banking Standalone APK (`app-release.apk`)**](https://github.com/rsumit1618/klysavi.AI/raw/master/releases/app-release.apk)
 > 
+> **📅 Latest Build Date**: `July 31, 2026`
+> 
 > **Use the following live credentials to test all features, profile synchronization, and card applications:**
 > - 📧 **Demo Login Email**: `test1@gmail.com`
 > - 🔑 **Demo Password**: `12345678`
