@@ -3,14 +3,14 @@ const { getFirestore, collection, doc, getDocs, getDoc, setDoc, updateDoc } = re
 const { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } = require('firebase/auth');
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCe482qkY-KtUh3kflvuYvJ9CRXzIc8S1c',
-  authDomain: 'echo-me-fe509.firebaseapp.com',
-  databaseURL: 'https://echo-me-fe509-default-rtdb.firebaseio.com',
-  projectId: 'echo-me-fe509',
-  storageBucket: 'echo-me-fe509.firebasestorage.app',
-  messagingSenderId: '395070756993',
-  appId: '1:395070756993:web:f4be044653eb429e23d580',
-  measurementId: 'G-JGY93CKSWR',
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.EXPO_PUBLIC_FIREBASE_DATABASE_URL,
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

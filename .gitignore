@@ -67,16 +67,14 @@ coverage/
 # AI Agent Plans & Scratch Workspace (DO NOT PUSH SENSITIVE PROMPTS/PLANS)
 .gemini/
 .brain/
+.artifacts/
 scratch/
 implementation_plan.md
 walkthrough.md
+*.artifact.md
 
 # TypeScript Build Info
 *.tsbuildinfo
 
 # Example Apps
 app-example
-
-# Scripts
-scripts/
-script/
